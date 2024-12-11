@@ -7,22 +7,22 @@ using System;
 
 public static class NetManager 
 {
-    //¶¨ÒåÌ×½Ó×Ö
+    //å®šä¹‰å¥—æ¥å­—
     static Socket socket;
-    //½ÓÊÜ»º³åÇø
+    //æ¥å—ç¼“å†²åŒº
     static ByteArray readBuff;
-    //Ğ´Èë¶ÓÁĞ
+    //å†™å…¥é˜Ÿåˆ—
     static Queue<ByteArray> writeQueue;
 
-    //ÊÂ¼şÎ¯ÍĞÀàĞÍ
+    //äº‹ä»¶å§”æ‰˜ç±»å‹
     public delegate void EventListener(string err);
-    //ÊÂ¼ş¼àÌıÁĞ±í
+    //äº‹ä»¶ç›‘å¬åˆ—è¡¨
     private static Dictionary<NetEvent, EventListener> eventListeners = new Dictionary<NetEvent, EventListener>();
 
-    //Ìí¼Ó¼àÌıÊÂ¼ş
+    //æ·»åŠ ç›‘å¬äº‹ä»¶
     public static void AddEventListener(NetEvent netEvent,EventListener eventListener)
     {
-        //Ìí¼ÓÊÂ¼ş
+        //æ·»åŠ äº‹ä»¶
         if (eventListeners.ContainsKey(netEvent)){
             eventListeners[netEvent] += eventListener;
         }
@@ -32,13 +32,13 @@ public static class NetManager
         }
     }
 
-    //É¾³ıÊÂ¼ş¼àÌı
+    //åˆ é™¤äº‹ä»¶ç›‘å¬
     public static void RemoveEventListener(NetEvent netEvent,EventListener eventListener)
     {
         if (eventListeners.ContainsKey(netEvent))
         {
             eventListeners[netEvent] -= eventListener;
-            //É¾³ı
+            //åˆ é™¤
             if (eventListeners[netEvent] == null)
             {
                 eventListeners.Remove(netEvent);
@@ -46,7 +46,7 @@ public static class NetManager
         }
     }
 
-    //·Ö·¢ÊÂ¼ş
+    //åˆ†å‘äº‹ä»¶
     private static void FireEvent(NetEvent netEvent,string str)
     {
         if (eventListeners.ContainsKey(netEvent))
@@ -55,13 +55,13 @@ public static class NetManager
         }
     }
 
-    //ÊÇ·ñÁ´½Ó
+    //æ˜¯å¦é“¾æ¥
     static bool isConnecting = false;
 
-    //Á¬½Ó
+    //è¿æ¥
     public static void Connect(string ip,int port)
     {
-        //×´Ì¬ÅĞ¶Ï
+        //çŠ¶æ€åˆ¤æ–­
         if(socket != null && socket.Connected)
         {
             Debug.Log("Connect fail,already Connected!");
@@ -72,9 +72,9 @@ public static class NetManager
             Debug.Log("Connect fail,already isConnecting!");
             return;
         }
-        //³õÊ¼»¯³ÉÔ±
+        //åˆå§‹åŒ–æˆå‘˜
         InitState();
-        //²ÎÊıÉèÖÃ
+        //å‚æ•°è®¾ç½®
        // socket.NoDelay = true;
         //Connect
         isConnecting = true;
@@ -82,7 +82,7 @@ public static class NetManager
     }
 
     /// <summary>
-    /// Connect»Øµ÷
+    /// Connectå›è°ƒ
     /// </summary>
     /// <param name="ar"></param>
     private static void ConnectCallback(IAsyncResult ar)
@@ -110,18 +110,18 @@ public static class NetManager
     {
         //Socket 
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        //½ÓÊÜ»º³åÇø
+        //æ¥å—ç¼“å†²åŒº
         readBuff = new ByteArray();
-        //Ğ´Èë¶ÓÁĞ
+        //å†™å…¥é˜Ÿåˆ—
         writeQueue = new Queue<ByteArray>();
-        //ÊÇ·ñÕıÔÚÁ¬½Ó
+        //æ˜¯å¦æ­£åœ¨è¿æ¥
         isConnecting = false;
-        //ÊÇ·ñÕıÔÚ¹Ø±Õ
+        //æ˜¯å¦æ­£åœ¨å…³é—­
         isClosing = false;
 
     }
 
-    //Connect»Øµ÷º¯Êı
+    //Connectå›è°ƒå‡½æ•°
     private static void ConnectionCallback(IAsyncResult ar)
     {
         try
@@ -143,7 +143,7 @@ public static class NetManager
 
     public static void Close()
     {
-        //×´Ì¬ÅĞ¶Ï
+        //çŠ¶æ€åˆ¤æ–­
         if(socket == null || !socket.Connected)
         {
             return;
@@ -176,15 +176,15 @@ public static class NetManager
 
 internal class ByteArray
 {
-    //»º³åÇø
+    //ç¼“å†²åŒº
     public byte[] bytes;
-    //¶ÁĞ´Î»ÖÃ
+    //è¯»å†™ä½ç½®
     public int readIdx = 0;
     public int writeIdx = 0;
-    //Êı¾İ³¤¶È
+    //æ•°æ®é•¿åº¦
     public int length { get { return writeIdx - readIdx; } }
 
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     public ByteArray(byte[] defaultBytes)
     {
         bytes = defaultBytes;
@@ -194,6 +194,7 @@ internal class ByteArray
 
     public ByteArray()
     {
+        
     }
 }
 
